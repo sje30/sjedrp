@@ -54,15 +54,18 @@ crossdrp <- function(xs1, ys1, xs2, ys2, nbins, r, a=NULL, auto=FALSE) {
   npts <- (npts1 + npts2)*0.5;
   ## since this could be either xs1 or xs2.
 
-  fs <- drpcorrections(rs, l, w)
+  fs <- drpcorrections(r, nbins, l, w)
 
   density <- npts / area
-
+  ## After checking Rodieck code, I now apply the correction factors to
+  ## ns, immediately after counting, rather than applying them to areas.
+  ## this seems to be the clinch!
+  ns <- ns/ fs;                         
   areas   <- pi * r^2 * ( (2*(1:nbins))-1);# Areas of each annulus (eq 1).
-  areas   <- areas * fs                     #correction factor.
-  lambdas <- npts * density * areas
 
-  ds <- (ns / areas) / npts
+  lambdas <- npts * density * areas     # Expected random count (eq 2).
+
+  ds <- (ns / areas) / npts             # Density measures (eq 3)
 
   res <- drpeffrad(lambdas, ns,  npts, density)
   effrad <- res$r
@@ -91,6 +94,7 @@ plot.sjedrp <- function (x) {
   last.bin <- x$nbins * x$r
   plot.label <- paste("eff rad", signif(x$effrad,3),
                       "pack", signif(x$p,3),
+                      "maxr", signif(x$maxr,3),
                       "rel", signif(x$k,3))
   ##names(hts) <- x$rs
   barplot(hts, col="gray",space=0, width=x$r, xlim=c(0,last.bin),
@@ -126,7 +130,7 @@ drpeffrad <- function (lambdas, ns, n, d) {
   ## bin is the one where the histogram first crosses the density line.
 
   ## In the 2001+ version of Rodieck's program, his PDF notes that
-  ## this problem can occaisonly occur in his program too.
+  ## this problem can occasionly occur in his program too.
   negs <-  which(fracs > 1.0);
   ##browser()
   if (length(negs) == 0) {
@@ -156,7 +160,6 @@ drpeffrad <- function (lambdas, ns, n, d) {
   list( r=r, first = firstnegative)
 }
 
-
 drpreliability <- function (density, area, r) {
   ## Return reliability factor K and critical density Dc.
   Dc <- 1.0 / (sqrt( area* pi) * r);    # (eq 11)
@@ -180,9 +183,13 @@ binit2 <- function (xs1, ys1, xs2, ys2, nbins, r, auto) {
   z$ns
 }
 
-drpcorrections <- function(rs, l, w) {       
-  ## Return the correction factors.
+drpcorrections <- function(r, nbins, l, w) {       
+  ## Return the correction factors.  Note correction factors are applied
+  ## to middle of bin, for consistency with Rodieck.  Rodieck had 1/pi=0.312
+  ## whereas that should be 0.318, but don't think that was enough alone
+  ## to make a difference.
   ## (eq 32)
+  rs <- ( (0:(nbins-1)) + 0.5)* r
   fs <- 1 - (2*rs *(l+w)/( pi * l * w)) + ( (rs * rs)/ (pi * l * w))
   fs
 }
@@ -221,3 +228,45 @@ drp.makemac <- function(file, bogus=T) {
               eol="\r",                 #get MAC line endings.
               row.names=F, col.names=F)
 }
+
+
+## myauto <- function(xs, ys, nbins=20, dr=10) {
+##   ## This was a simple implementation, following closely the
+##   ## Rodieck implemenation.  Think I can comment this out for now.
+##   bins <- binit2(xs, ys, xs, ys, nbins, dr, TRUE)
+##   counts <- bins
+##   bw <- dr 
+##   mPoints <- length(xs)
+##   scale <- 1.0 / (pi * mPoints * bw * bw)
+##   k <- scale / (2*(1:nbins) - 1)
+##   bins <- bins * k
+
+##   ## now correct for bounds.
+##   width <- 700; height <- 700
+##   c1 <- 2/pi * ((1/width) + (1/height))
+##   c2 <- 0.312 / (width*height)          #should be 0.318
+##   corr <- real(nbins)
+##   for (i in 1:nbins) {
+##     r1 <- ( (i-0.5)*dr)                 #add correction to middle of bin width
+##     a <- 1 - (c1*r1) + (c2*r1*r1)
+##     corr[i] <- 1/a
+##     bins[i] <- (bins[i] * corr[i])
+
+##   }
+
+##   barplot(bins, col="gray")
+##   density <- mPoints/(width*height) ##/ (micromilli*micromilli)
+##   abline(h=density)
+
+##   ## try to get the effect radius.
+##   i <- 1
+##   deadVolume <- 0.0
+##   while( bins[i] < density) {
+##     deadVolume <- deadVolume + ( (density - bins[i])* ((2*i)-1))
+##     i <- 1 + i
+##   }
+##   effrad <- bw * sqrt( deadVolume/density)
+##   print(effrad)
+
+##   list( bins=bins, corr=corr, counts=counts)
+## }
