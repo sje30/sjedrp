@@ -32,7 +32,7 @@ crossdrp <- function(xs1, ys1, xs2, ys2, nbins, r, a=NULL) {
   l <- top-bottom; w <- right-left;
   cat(paste(l, w, "\n"))
 
-  ## now filter out points.
+  ## now filter out points that are outside the bounding area A.
   subset1.x <- ((xs1 >= left) & (xs1 <= right))
   subset1.y <- ((ys1 >= bottom) & (ys1 <= top))
   subset1 <- which( subset1.x & subset1.y)
@@ -122,6 +122,7 @@ drpeffrad <- function (lambdas, ns, n, d) {
   ## bin is the one where the histogram first crosses the density line.
   
   negs <-  which(fracs > 1.0);
+  ##browser()
   if (length(negs) == 0) {
     v <- max(fracs); firstnegative <- which(fracs == v)
     warning(paste("no negative elements in drp_effective_radius. Closest"
@@ -133,7 +134,16 @@ drpeffrad <- function (lambdas, ns, n, d) {
     ## We have negative values, so we can just sum the difference
     ## values until just before the first negative entry.
     firstnegative <- negs[1];
-    volume  <- sum( diffs[1:(firstnegative-1)])/n; # (eq 7)
+    if (firstnegative == 1) {
+      ## If the firstnegative element is in bin 1, this means that bin1
+      ## is above average -- this can happen (and perhaps is indicative of
+      ## clustering), in which case I think volume, and hence effective radius
+      ## should be zero.
+      ##warning("firstnegative should be greater than 1")
+      volume <- 0
+    } else {
+      volume  <- sum( diffs[1:(firstnegative-1)])/n; # (eq 7)
+    }
     r <- sqrt(volume/(pi*d));	# (eq 9)
   }
   
