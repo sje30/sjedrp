@@ -90,18 +90,21 @@ crossdrp <- function(xs1, ys1, xs2, ys2, nbins, r, a=NULL, auto=FALSE) {
   res
 }
 
-plot.sjedrp <- function (x) {
+plot.sjedrp <- function (x, scale=1, title=NULL) {
   ## Plot the results of the density recovery profile.
-  hts <- x$ds
+  ## The scale parameter allows us to change the scale of the y axis.
+  ## e.g. when going from um^2 to mm^2 use a scale of 1e6.
+  hts <- (x$ds*scale)
   last.bin <- x$nbins * x$r
-  plot.label <- paste("eff rad", signif(x$effrad,3),
+  plot.label <- paste(title,
+                      "eff rad", signif(x$effrad,3),
                       "pack", signif(x$p,3),
                       "maxr", signif(x$maxr,3),
                       "rel", signif(x$k,3))
   ##names(hts) <- x$rs
   barplot(hts, col="gray",space=0, width=x$r, xlim=c(0,last.bin),
           main=plot.label)
-  lines( c(0,last.bin), c(x$density, x$density))
+  lines( c(0,last.bin), c(x$density, x$density)*scale)
   axis(1, at=c(0, last.bin))
   lines( c(x$effrad, x$effrad), c(0, x$density))
   points( c(x$maxr), c(0),pch='|')
