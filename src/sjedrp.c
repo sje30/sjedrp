@@ -1,7 +1,7 @@
 #include <R.h>
 #include <S.h>			/* for seed_in, seed_out */
 
-#define SMALL_VALUE 0.0001
+#define SMALL_VALUE 0.00001
 
 /* If we are doing an AUTODRP, then data sets 1 and 2 are the same points.
  * In this case, when i==j the distance will be zero.  But we don't want
@@ -28,7 +28,10 @@ void drp_bin_it_r(Sfloat *x1s, Sfloat *y1s, int *pn1,
    * binned into one of NBINS values in NS, spaced R um apart.
    *
    * This is used by the DRP procedure and ensures that it is _quick_,
-   * say for greater than 200 cells.
+   * say for greater than 200 cells.  Another speed, maybe in R, is to
+   * sort the points by their x-coordinate, so that we only have to
+   * measure distance to a subset of cells.  This will take more
+   * effort though.  This seems to work fine.
    */
      
   int i,j;
