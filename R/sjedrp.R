@@ -1,7 +1,6 @@
 ### Code for computing Density Recovery Profile (DRP).
 ### Wed 13 Feb 2002.
 
-
 autodrp <- function(xs, ys, nbins, r, a=NULL) {
   ## Compute the autoDRP.  This is a simple wrapper around the cross DRP.
   crossdrp(xs, ys, xs, ys, nbins, r, a)
@@ -105,7 +104,6 @@ drppackingfactor <- function (effrad, d) {
   list (p = p, maxr = maxr)
 }
 
-
 drpeffrad <- function (lambdas, ns, n, d) {
   ## Return the effective radius.
   ## If the effective radius cannot be computed, it returns a negative value.
@@ -119,7 +117,9 @@ drpeffrad <- function (lambdas, ns, n, d) {
   ## sometims rounding errors mean that it never finds such a point.  In
   ## that case, we take the largest value of n/lambda and assume that
   ## bin is the one where the histogram first crosses the density line.
-  
+
+  ## In the 2001+ version of Rodieck's program, his PDF notes that
+  ## this problem can occaisonly occur in his program too.
   negs <-  which(fracs > 1.0);
   ##browser()
   if (length(negs) == 0) {
@@ -150,17 +150,14 @@ drpeffrad <- function (lambdas, ns, n, d) {
 }
 
 
-drpreliability <- function (density, area, r)
-  {
-    ## Return reliability factor K and critical density Dc.
-    Dc <- 1.0 / (sqrt( area* pi) * r);    # (eq 11)
-    k  <- density/ Dc;                    # (eq 13)
-    list (k = k, Dc = Dc)
-  }
+drpreliability <- function (density, area, r) {
+  ## Return reliability factor K and critical density Dc.
+  Dc <- 1.0 / (sqrt( area* pi) * r);    # (eq 11)
+  k  <- density/ Dc;                    # (eq 13)
+  list (k = k, Dc = Dc)
+}
 
-
-binit2 <- function (xs1, ys1, xs2, ys2, nbins, r)
-{
+binit2 <- function (xs1, ys1, xs2, ys2, nbins, r) {
   ## Bin the cross-correlation distances.  This is a wrapper around
   ## a C routine that does all the hard work.
   npts1 <- length(xs1)
@@ -176,13 +173,8 @@ binit2 <- function (xs1, ys1, xs2, ys2, nbins, r)
   z$ns
 }
 
-
-
-drpcorrections <- function(rs, l, w)
-{       
+drpcorrections <- function(rs, l, w) {       
   ## Return the correction factors.
-  ## TODO: check that region `a' is always non-negative, else these
-  ## corrections shouldn't be used.
   ## (eq 32)
   fs <- 1 - (2*rs *(l+w)/( pi * l * w)) + ( (rs * rs)/ (pi * l * w))
   fs
