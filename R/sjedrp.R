@@ -17,7 +17,7 @@ crossdrp <- function(xs1, ys1, xs2, ys2, nbins, r, a=NULL) {
 
     lims <- range(c(ys1, ys2));
     bottom <- lims[1]; top <-lims[2];
-    cat(paste(left, right, bottom, top, "\n"))
+    ##cat(paste(left, right, bottom, top, "\n"))
   }
   else {
     if (is.numeric(a)) {
@@ -30,7 +30,6 @@ crossdrp <- function(xs1, ys1, xs2, ys2, nbins, r, a=NULL) {
   }
   
   l <- top-bottom; w <- right-left;
-  cat(paste(l, w, "\n"))
 
   ## now filter out points that are outside the bounding area A.
   subset1.x <- ((xs1 >= left) & (xs1 <= right))
