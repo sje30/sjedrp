@@ -36,11 +36,18 @@ crossdrp <- function(xs1, ys1, xs2, ys2, nbins, r, a=NULL) {
   subset1 <- which( subset1.x & subset1.y)
   xs1 <- xs1[subset1]; ys1 <- ys1[subset1]
   
-  subset2.x <- ((xs2 > left) & (xs2 < right))
-  subset2.y <- ((ys2 > bottom) & (ys2 < top))
+  subset2.x <- ((xs2 >= left) & (xs2 <= right))
+  subset2.y <- ((ys2 >= bottom) & (ys2 <= top))
   subset2 <- which( subset2.x & subset2.y)
   xs2 <- xs2[subset2]; ys2 <- ys2[subset2]
-  
+
+  if (TRUE) {
+    ## check that we have the same data set.
+    ## this is temporary, since it will not be true for cross-correlations.
+    print("check that we have same data set...");
+    stopifnot(identical(all.equal(subset1, subset2), TRUE))
+  }
+
   ns <- binit2(xs1, ys1, xs2, ys2, nbins, r)
   rs <- r * (0:(nbins-1))                 #starting radius of each annulus.
   area <- l * w
@@ -83,8 +90,8 @@ plot.sjedrp <- function (x) {
   hts <- x$ds
   last.bin <- x$nbins * x$r
   plot.label <- paste("eff rad", signif(x$effrad,3),
-                      "packing", signif(x$p,3),
-                      "reliability", signif(x$k,3))
+                      "pack", signif(x$p,3),
+                      "rel", signif(x$k,3))
   ##names(hts) <- x$rs
   barplot(hts, col="gray",space=0, width=x$r, xlim=c(0,last.bin),
           main=plot.label)
