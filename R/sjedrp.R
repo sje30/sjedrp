@@ -3,10 +3,10 @@
 
 autodrp <- function(xs, ys, nbins, r, a=NULL) {
   ## Compute the autoDRP.  This is a simple wrapper around the cross DRP.
-  crossdrp(xs, ys, xs, ys, nbins, r, a)
+  crossdrp(xs, ys, xs, ys, nbins, r, a, auto=TRUE)
 }
 
-crossdrp <- function(xs1, ys1, xs2, ys2, nbins, r, a=NULL) {
+crossdrp <- function(xs1, ys1, xs2, ys2, nbins, r, a=NULL, auto=FALSE) {
   ## Compute the crossDRP.
   if (is.null(a)) {
     ## If a was not specified, we calculate bounds of dataset from the
@@ -41,14 +41,13 @@ crossdrp <- function(xs1, ys1, xs2, ys2, nbins, r, a=NULL) {
   subset2 <- which( subset2.x & subset2.y)
   xs2 <- xs2[subset2]; ys2 <- ys2[subset2]
 
-  if (TRUE) {
-    ## check that we have the same data set.
-    ## this is temporary, since it will not be true for cross-correlations.
-    print("check that we have same data set...");
+  if (auto) {
+    ## For an autodrp, check subset1 and 2 are equal; this
+    ## was not the case Mon 24 Feb 2003, see VC logs.
     stopifnot(identical(all.equal(subset1, subset2), TRUE))
   }
 
-  ns <- binit2(xs1, ys1, xs2, ys2, nbins, r)
+  ns <- binit2(xs1, ys1, xs2, ys2, nbins, r, auto)
   rs <- r * (0:(nbins-1))                 #starting radius of each annulus.
   area <- l * w
   npts1 <- length(xs1); npts2 <- length(xs2);
@@ -79,7 +78,8 @@ crossdrp <- function(xs1, ys1, xs2, ys2, nbins, r, a=NULL) {
 
   res <- list(effrad = effrad, p = p, maxr = maxr, k = k, Dc = Dc,
               ds =ds, density=density, n1=npts1, n2=npts2,
-              nbins=nbins,r=r)
+              nbins=nbins,r=r,
+              ns=ns, fs=fs)
   class(res) <- "sjedrp"
 
   res
@@ -164,7 +164,7 @@ drpreliability <- function (density, area, r) {
   list (k = k, Dc = Dc)
 }
 
-binit2 <- function (xs1, ys1, xs2, ys2, nbins, r) {
+binit2 <- function (xs1, ys1, xs2, ys2, nbins, r, auto) {
   ## Bin the cross-correlation distances.  This is a wrapper around
   ## a C routine that does all the hard work.
   npts1 <- length(xs1)
@@ -172,7 +172,7 @@ binit2 <- function (xs1, ys1, xs2, ys2, nbins, r) {
   z <- .C("drp_bin_it_r",
           as.double(xs1), as.double(ys1), as.integer(npts1),
           as.double(xs2), as.double(ys2), as.integer(npts2),
-          as.integer(nbins), as.integer(r),
+          as.integer(nbins), as.double(r), as.integer(auto),
           ## create memory to store return values.
           ns = integer(nbins),
           PACKAGE = "sjedrp"
@@ -197,4 +197,27 @@ drp.makestf <- function (x, y, file) {
   write.table(d, file=file,
               eol="\r",                 #\r for the macintosh...
               sep="\t", quote=FALSE, row.names=FALSE)
+}
+
+drp.makemac <- function(file, bogus=T) {
+  ## Tue 25 Feb 2003
+  ## Convert  FILE into format suitable for reading into Mac.
+  ## See ../data/safe for my output from mac.
+  ## Assumes top line has x,y on it.
+  data <- read.table(file, header=T)
+  x <- data$x
+  y <- data$y
+  x.range <- range(x)
+  y.range <- range(y)
+  delta <- (x.range[2] - x.range[1])*0.1
+
+  ## add two data points to extend the lower and upper range.
+  
+  lo <- c(x.range[1], y.range[1]) - delta
+  hi <- c(x.range[2], y.range[2]) + delta
+  data2 <- rbind(lo, hi, cbind(x,y))
+  newfile <- gsub(".txt", ".macdrp.txt", file)
+  write.table(data2, newfile, quote=F,
+              eol="\r",                 #get MAC line endings.
+              row.names=F, col.names=F)
 }
