@@ -170,7 +170,8 @@ binit2 <- function (xs1, ys1, xs2, ys2, nbins, r)
           as.double(xs2), as.double(ys2), as.integer(npts2),
           as.integer(nbins), as.integer(r),
           ## create memory to store return values.
-          ns = integer(nbins)
+          ns = integer(nbins),
+          PACKAGE = "sjedrp"
           )
   z$ns
 }
