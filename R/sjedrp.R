@@ -125,7 +125,7 @@ drpeffrad <- function (lambdas, ns, n, d) {
   ##browser()
   if (length(negs) == 0) {
     v <- max(fracs); firstnegative <- which(fracs == v)
-    warning(paste("no negative elements in drp_effective_radius. Closest"
+    warning(paste("no negative elements in drpeffrad. Closest"
                   ,v, "at position", firstnegative))
     volume  <- sum( diffs[1:(firstnegative-1)])/n; # (eq 7)
     r <- sqrt(volume/(pi*d));	# (eq 9)
@@ -186,4 +186,16 @@ drpcorrections <- function(rs, l, w)
   ## (eq 32)
   fs <- 1 - (2*rs *(l+w)/( pi * l * w)) + ( (rs * rs)/ (pi * l * w))
   fs
+}
+
+drp.makestf <- function (x, y, file) {
+  ## Make an STF file suitable for reading in with Bob Rodieck's program.
+  npts <- length(x)
+  stopifnot(npts == length(y))
+  type <- numeric(length=npts)+1
+  z <- numeric(length=npts)
+  d <- data.frame(type=type, x=x, y=y, z=z, tag=z, br=z)
+  write.table(d, file=file,
+              eol="\r",                 #\r for the macintosh...
+              sep="\t", quote=FALSE, row.names=FALSE)
 }
