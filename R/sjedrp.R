@@ -51,8 +51,10 @@ crossdrp <- function(xs1, ys1, xs2, ys2, nbins, r, a=NULL, auto=FALSE) {
   rs <- r * (0:(nbins-1))                 #starting radius of each annulus.
   area <- l * w
   npts1 <- length(xs1); npts2 <- length(xs2);
-  npts <- (npts1 + npts2)*0.5;
-  ## since this could be either xs1 or xs2.
+
+  ## For cross-correlation, need to use geometrical mean, rather than
+  ## arithmetical mean.
+  npts <- sqrt(npts1 * npts2)
 
   fs <- drpcorrections(r, nbins, l, w)
 
@@ -60,7 +62,7 @@ crossdrp <- function(xs1, ys1, xs2, ys2, nbins, r, a=NULL, auto=FALSE) {
   ## After checking Rodieck code, I now apply the correction factors to
   ## ns, immediately after counting, rather than applying them to areas.
   ## this seems to be the clinch!
-  ns <- ns/ fs;                         
+  ns <- ns/ fs;
   areas   <- pi * r^2 * ( (2*(1:nbins))-1);# Areas of each annulus (eq 1).
 
   lambdas <- npts * density * areas     # Expected random count (eq 2).
@@ -132,7 +134,6 @@ drpeffrad <- function (lambdas, ns, n, d) {
   ## In the 2001+ version of Rodieck's program, his PDF notes that
   ## this problem can occasionly occur in his program too.
   negs <-  which(fracs > 1.0);
-  ##browser()
   if (length(negs) == 0) {
     v <- max(fracs); firstnegative <- which(fracs == v)
     warning(paste("no negative elements in drpeffrad. Closest"
@@ -170,6 +171,9 @@ drpreliability <- function (density, area, r) {
 binit2 <- function (xs1, ys1, xs2, ys2, nbins, r, auto) {
   ## Bin the cross-correlation distances.  This is a wrapper around
   ## a C routine that does all the hard work.
+  ## The bins are made thus:
+  ## [0, r), [r 2r), [2r 3r), ... [(n-1)r r)
+  ## which matches Rodieck.
   npts1 <- length(xs1)
   npts2 <- length(xs2)
   z <- .C("drp_bin_it_r",
@@ -181,6 +185,29 @@ binit2 <- function (xs1, ys1, xs2, ys2, nbins, r, auto) {
           PACKAGE = "sjedrp"
           )
   z$ns
+}
+
+binit2.check <- function() {
+  ## Check whether binit2 is working by using outer-product to calculate
+  ## all pairs of distances.  This could be wasteful to use in general.
+  n <- 50
+  nbins <- 20
+  r <- 10
+  xs <- 500 * runif(n); ys <- 500 *runif(n)
+  b <- binit2(xs, ys, xs, ys, nbins, r, auto=1)
+
+  dist <- function(a, b) {
+    ## compute distance between cells A and B.
+    dx <- xs[a] - xs[b];
+    dy <- ys[a] - ys[b];
+    dist <- sqrt((dx**2)+(dy**2))
+  }
+  
+  dists2 <- outer(1:n, 1:n, dist)
+  ## Only difference should be that first bin has n pts in it, since
+  ## the outer product method includes self-counts.
+  h2 <- hist(dists2, breaks=seq(from=0, by=r, to=max(dists2)+r),right=F,plot=F)
+  h2$counts[1:nbins] - b
 }
 
 drpcorrections <- function(r, nbins, l, w) {       
