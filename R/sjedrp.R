@@ -106,7 +106,7 @@ plot.sjedrp <- function (x, scale=1, title=NULL) {
           main=plot.label)
   lines( c(0,last.bin), c(x$density, x$density)*scale)
   axis(1, at=c(0, last.bin))
-  lines( c(x$effrad, x$effrad), c(0, x$density))
+  lines( c(x$effrad, x$effrad), scale * c(0, x$density))
   points( c(x$maxr), c(0),pch='|')
 }
 
