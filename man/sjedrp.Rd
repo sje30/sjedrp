@@ -11,7 +11,7 @@
 \usage{
 res <- autodrp(xs, ys, nbins, r, a)
 res <- crossdrp(xs1, ys1, xs2, ys2, nbins, r, a,auto)
-plot.sjedrp(res)
+plot.sjedrp(res, mirror, scale)
 drp.makestf(x, y, file)
 }
 \arguments{
@@ -30,6 +30,12 @@ drp.makestf(x, y, file)
   \item{file}{File output (with Macintosh end of lines) for Bob
     Rodieck's program.  This has extra columns, as needed by pre-2001
     versions of his program.}
+  \item{res}{Output from a call to autodrp or crossdrp.}
+  \item{scale}{Scaling factor for multiplying values on y-axis.  For
+    example, if scale=1e6, this converts the density from $um^{-2}$ to
+    $mm^{-2}$, which is more readable.}
+  \item{mirror}{A boolean, FALSE by default.  If true, the DRP is
+    plotted symmetrically around the y-axis.}
 }
 \value{
   \item{res}{A list with the following components:}
@@ -62,5 +68,15 @@ drp.makestf(x, y, file)
   from Rodieck (1992).  Various data files have been tested, see
   \code{\link{sjedrp.d10}} for details.
 }
+
+\examples{
+data(sjedrp.d20)
+bb <- c(0, 700, 0, 700)
+res <- autodrp(sjedrp.d20$x, sjedrp.d20$y, nbins=20, r=10, a=bb)
+par(mfrow=c(2,1), las=1)
+plot(res, scale=1e6)
+plot(res, mirror=TRUE, scale=1e6)
+}
+
 \author{Stephen Eglen}
 \keyword{spatial}
