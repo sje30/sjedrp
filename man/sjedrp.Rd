@@ -76,6 +76,8 @@ res <- autodrp(sjedrp.d20$x, sjedrp.d20$y, nbins=20, r=10, a=bb)
 par(mfrow=c(2,1), las=1)
 plot(res, scale=1e6)
 plot(res, mirror=TRUE, scale=1e6)
+title(xlab=expression(paste("distance (", mu, "m)")),
+      ylab=expression(paste("density (cells/",mm^2, ")")))
 }
 
 \author{Stephen Eglen}
