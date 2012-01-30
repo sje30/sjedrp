@@ -90,11 +90,14 @@ crossdrp <- function(xs1, ys1, xs2, ys2, nbins, r, a=NULL, auto=FALSE) {
   res
 }
 
-plot.sjedrp <- function (x, scale=1, title=NULL, mirror=FALSE) {
+plot.sjedrp <- function (x, scale=1, title=NULL, mirror=FALSE,
+                         show.title=TRUE, ylab='density',
+                         xlab='distance') {
   ## Plot the results of the density recovery profile.
   ## The SCALE parameter allows us to change the scale of the y axis.
   ## e.g. when going from um^2 to mm^2 use a scale of 1e6.
   ## MIRROR allows the plot to be mirrored across the y-axis.
+  ## SHOW.TITLE:  If false,  do not add any title.
   hts <- (x$ds*scale)
   last.bin <- x$nbins * x$r
   plot.label <- paste(title,
@@ -102,6 +105,9 @@ plot.sjedrp <- function (x, scale=1, title=NULL, mirror=FALSE) {
                       "pack", signif(x$p,3),
                       "maxr", signif(x$maxr,3),
                       "rel", signif(x$k,3))
+  if (!show.title)
+    plot.label <- NULL
+  
   ##names(hts) <- x$rs
 
   if (mirror) {
@@ -109,7 +115,7 @@ plot.sjedrp <- function (x, scale=1, title=NULL, mirror=FALSE) {
     hts <- c(rev(hts), hts)
     
     barplot(hts, col="gray",space=0, width=x$r, xlim=c(0,2*last.bin),
-            main=plot.label)
+            main=plot.label, xlab=xlab, ylab=ylab)
 
     ## mean density line:
     lines( c(0,2*last.bin), c(x$density, x$density)*scale)
@@ -125,6 +131,7 @@ plot.sjedrp <- function (x, scale=1, title=NULL, mirror=FALSE) {
   } else {
     ## standard, one-sided plot.
     barplot(hts, col="gray",space=0, width=x$r, xlim=c(0,last.bin),
+            ylab=ylab, xlab=xlab,
             main=plot.label)
     lines( c(0,last.bin), c(x$density, x$density)*scale)
     axis(1, at=c(0, last.bin))
@@ -324,3 +331,83 @@ drp.makemac <- function(file, bogus=T) {
 
 ##   list( bins=bins, corr=corr, counts=counts)
 ## }
+
+
+
+autocorr <- function(xs, ys, nbins, r, a=NULL) {
+  ## Compute the autoDRP.  This is a simple wrapper around the cross DRP.
+  crosscorr(xs, ys, xs, ys, nbins, r, a, auto=TRUE)
+}
+
+crosscorr <- function(xs1, ys1, xs2, ys2, nbins, r, a=NULL, auto=FALSE) {
+  ## Compute the crossDRP.
+  if (is.null(a)) {
+    ## If a was not specified, we calculate bounds of dataset from the
+    ## array.
+    lims <- range(c(xs1, xs2));
+    left <- lims[1]; right <-lims[2];
+
+    lims <- range(c(ys1, ys2));
+    bottom <- lims[1]; top <-lims[2];
+    ##cat(paste(left, right, bottom, top, "\n"))
+  }
+  else {
+    if (is.numeric(a)) {
+      ## From the a vector, extract bounds of the area to study.
+      left <- a[1]; right <- a[2]; bottom <- a[3]; top <- a[4];
+    }
+    else {
+      stop("a is invalid - should be a vector of 4 numbers\n")
+    }
+  }
+  
+  l <- top-bottom; w <- right-left;
+
+  ## now filter out points that are outside the bounding area A.
+  subset1.x <- ((xs1 >= left) & (xs1 <= right))
+  subset1.y <- ((ys1 >= bottom) & (ys1 <= top))
+  subset1 <- which( subset1.x & subset1.y)
+  xs1 <- xs1[subset1]; ys1 <- ys1[subset1]
+  
+  subset2.x <- ((xs2 >= left) & (xs2 <= right))
+  subset2.y <- ((ys2 >= bottom) & (ys2 <= top))
+  subset2 <- which( subset2.x & subset2.y)
+  xs2 <- xs2[subset2]; ys2 <- ys2[subset2]
+
+  if (auto) {
+    ## For an autodrp, check subset1 and 2 are equal; this
+    ## was not the case Mon 24 Feb 2003, see VC logs.
+    stopifnot(identical(all.equal(subset1, subset2), TRUE))
+  }
+
+  npts1 <- length(xs1)
+  npts2 <- length(xs2)
+  maxn <- npts1*npts2                   #CONSERVATIVE OVERESTIMATE!!!
+  z <- .C("cross_corr_r",
+          as.double(xs1), as.double(ys1), as.integer(npts1),
+          as.double(xs2), as.double(ys2), as.integer(npts2),
+          as.integer(nbins), as.double(r), as.integer(auto),
+          ## create memory to store return values.
+          dx = double(maxn), dy=double(maxn),k=integer(1),
+          PACKAGE = "sjedrp"
+          )
+
+  dx <- z$dx[1:z$k]
+  dy <- z$dy[1:z$k]
+  res <- list(x = dx, y = dy, n1=npts1, n2=npts2,
+              nbins=nbins,r=r)
+  class(res) <- "sjecorr"
+
+  res
+}
+
+plot.sjecorr <- function(x, pts.cex=0.5, ...) {
+  nbins <- x$nbins
+  r <- x$r
+  maxr <- nbins * r
+  plot(NA, xlim=c(-maxr, maxr), ylim=c(-maxr, maxr), yaxt='n',
+       xlab='', ylab='', asp=1, bty='n')
+  points(x$x, x$y, pch=19, cex=pts.cex)
+  symbols(x=rep(0,nbins), y=rep(0,nbins),
+          circles=(1:nbins)*r, inch=F, add=T)
+}
