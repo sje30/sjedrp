@@ -82,7 +82,7 @@ crossdrp <- function(xs1, ys1, xs2, ys2, nbins, r, a=NULL, auto=FALSE) {
   }
 
   sd.poisson <- Dc / (sqrt( (2*(1:nbins)) - 1))
-  mid.bin <- seq(from=drp.r/2, by=drp.r, length=drp.nbins)
+  mid.bin <- seq(from=r/2, by=r, length=nbins)
   res <- list(effrad = effrad, p = p, maxr = maxr, k = k, Dc = Dc,
               ds =ds, density=density, n1=npts1, n2=npts2,
               nbins=nbins,r=r,
