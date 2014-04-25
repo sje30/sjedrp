@@ -215,14 +215,12 @@ binit2 <- function (xs1, ys1, xs2, ys2, nbins, r, auto) {
   ## which matches Rodieck.
   npts1 <- length(xs1)
   npts2 <- length(xs2)
-  z <- .C("drp_bin_it_r",
+  z <- .C(C_drp_bin_it_r,
           as.double(xs1), as.double(ys1), as.integer(npts1),
           as.double(xs2), as.double(ys2), as.integer(npts2),
           as.integer(nbins), as.double(r), as.integer(auto),
           ## create memory to store return values.
-          ns = integer(nbins),
-          PACKAGE = "sjedrp"
-          )
+          ns = integer(nbins) )
   z$ns
 }
 
@@ -388,13 +386,12 @@ crosscorr <- function(xs1, ys1, xs2, ys2, nbins, r, a=NULL, auto=FALSE) {
   npts1 <- length(xs1)
   npts2 <- length(xs2)
   maxn <- npts1*npts2                   #CONSERVATIVE OVERESTIMATE!!!
-  z <- .C("cross_corr_r",
+  z <- .C(C_cross_corr_r,
           as.double(xs1), as.double(ys1), as.integer(npts1),
           as.double(xs2), as.double(ys2), as.integer(npts2),
           as.integer(nbins), as.double(r), as.integer(auto),
           ## create memory to store return values.
-          dx = double(maxn), dy=double(maxn),k=integer(1),
-          PACKAGE = "sjedrp"
+          dx = double(maxn), dy=double(maxn),k=integer(1)
           )
 
   dx <- z$dx[1:z$k]
