@@ -1,15 +1,44 @@
 #include <R.h>
 #include <S.h>			/* for seed_in, seed_out */
+#include <Rinternals.h>
+#include <R_ext/Rdynload.h>	/* for DLL types */
+
+
+    
+
 
 
 /* Octave code was in ~/mosaics/code/drp */
+
+void cross_corr_r(Sfloat *x1s, Sfloat *y1s, int *pn1,
+		  Sfloat *x2s, Sfloat *y2s, int *pn2,
+		  int *pnbins, Sfloat *pr, int *pauto,
+		  Sfloat *dxs,  Sfloat *dys, int *pk);
 
 void drp_bin_it_r(Sfloat *x1s, Sfloat *y1s, int *pn1,
 		  Sfloat *x2s, Sfloat *y2s, int *pn2,
 		  int *pnbins, Sfloat *pr, int *pauto,
 		  int   *ns);
 
+R_CMethodDef cMethods[] = {
+  {"cross_corr_r", (DL_FUNC) &cross_corr_r, 12,
+   (R_NativePrimitiveArgType[12])
+   {REALSXP, REALSXP, INTSXP,
+    REALSXP, REALSXP, INTSXP,
+    INTSXP,  REALSXP, INTSXP,
+    REALSXP, REALSXP, INTSXP}},
+  {"drp_bin_it_r", (DL_FUNC) &drp_bin_it_r, 10,
+   (R_NativePrimitiveArgType[10])
+   {REALSXP, REALSXP, INTSXP,
+    REALSXP, REALSXP, INTSXP,
+    INTSXP, REALSXP, INTSXP,
+    INTSXP}},
+  {NULL, NULL, 0}
+};
 
+void R_init_sjedrp(DllInfo *info) {
+  R_registerRoutines(info, cMethods, NULL, NULL, NULL);
+}
 
 void drp_bin_it_r(Sfloat *x1s, Sfloat *y1s, int *pn1,
 		  Sfloat *x2s, Sfloat *y2s, int *pn2,
