@@ -1,0 +1,8 @@
+Package: sjedrp
+Version: 0.11
+Title: Density recovery profile for mosaics, Rodieck(1991) method.
+Author: Stephen Eglen <stephen@gnu.org>
+Suggests: testthat
+Maintainer: Stephen Eglen <stephen@gnu.org>
+Description: Compute the density recovery profile, from Rodieck (1991).
+License: GPL
