@@ -1,0 +1,65 @@
+2013-05-09  Stephen Eglen  <stephen@gnu.org>
+
+	* R/zzz.R (.onUnload): New function, adapted from .Last.Lib().
+	Removed .First.lib() upon update to R 3.0.0.
+	NAMESPACE: New file, required for R 3.0.0.
+
+2012-02-14  Stephen Eglen  <stephen@gnu.org>
+
+	* src/sjedrp.c (cross_corr_r): New function to return offsets.
+
+2012-02-07  Stephen Eglen  <stephen@gnu.org>
+
+	* R/sjedrp.R (crossdrp): Return sd.poisson and mid.bin.
+
+2012-01-30  Stephen Eglen  <stephen@gnu.org>
+
+	* R/sjedrp.R (autocorr,crosscorr): New functions.
+
+2007-07-15  Stephen Eglen  <stephen@gnu.org>
+
+	* R/sjedrp.R (plot.sjedrp): Add mirror argument to allow plot to
+	be reflected.
+
+2003-09-02  Stephen Eglen  <stephen@bushmills.inf.ed.ac.uk>
+
+	* R/sjedrp.R (plot.sjedrp): Include "scale" when drawing effective
+	radius.
+	
+
+2003-07-17  Stephen Eglen  <stephen@bushmills.inf.ed.ac.uk>
+
+	* R/sjedrp.R (plot.sjedrp): Add scale and title args: scale allows
+	y axis to be multiplied by constant, and title allows prefix to title.
+
+2003-02-26  Stephen Eglen  <eglen@pcg.wustl.edu>
+
+	* R/sjedrp.R (drpcorrections): Add corrections assuming r is the
+	distance in the middle of each bin, following Rodieck code.
+	(crossdrp): Apply correction factor to counts, ns, before taking
+	area.
+	(binit2.check): Test function for binit2, using outer product to
+	calculate all pairwise distances.
+	(crossdrp): use geometrical mean for counting N from N1, N2.
+
+2003-02-25  Stephen Eglen  <eglen@pcg.wustl.edu>
+
+	* R/sjedrp.R (drp.makemac): New function to allow for easy testing
+	of data files with macdrp.
+	(crossdrp): Add new argument, auto, to tell whether we want an
+	auto drp or a cross drp.  This should make a difference.  Found
+	bug before that the subset1 and subset2 were using different
+	tests, > versus >=, and so sometimes in the autodrp the two data
+	points were different!  This is now tested for.
+
+2002-02-23  Stephen Eglen  <eglen@thalamus.wustl.edu>
+
+	* R/sjedrp.R (drp.makestf): New function to allow comparison
+	with Bob Rodieck's program.
+
+2002-02-13  Stephen Eglen  <eglen@thalamus.wustl.edu>
+
+	* R/sjedrp.R (drpeffrad): Handle case when first bin is above the
+	average -- in this case, effective radius should be zero.
+	
+
