@@ -1,0 +1,10 @@
+Tue 25 Feb 2003
+
+When I compared with MacDRP, I got slightly different output.  Note
+that I used different files (Mac line-endings, together with bogus
+extra points, as I worried about how drp was cutting out the cell
+pairs.  Results seem close-enough now.)
+
+These mac files were created uising the sjedrp routine drp.makemac()
+pdf output made by using grab to get the images then throw them into
+TextEdit.

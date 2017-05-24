@@ -1,0 +1,17 @@
+The text files are in the format required by 
+
+rename 's/dmin_wid700_n300_d/sjedrp.d/' *
+mv dmin_wid700_n300_d10.stf sjedrp.d10.stf
+mv dmin_wid700_n300_d10.stf-drp.ps sjedrp.d10.stf-drp.ps
+mv dmin_wid700_n300_d20.stf sjedrp.d20.stf
+mv dmin_wid700_n300_d20.stf-drp.ps sjedrp.d20.stf-drp.ps
+mv dmin_wid700_n300_d25.stf sjedrp.d25.stf
+mv dmin_wid700_n300_d25.stf-drp.ps sjedrp.d25.stf-drp.ps
+mv dmin_wid700_n300_d30.stf sjedrp.d30.stf
+mv dmin_wid700_n300_d30.stf-drp.ps sjedrp.d30.stf-drp.ps
+
+rename 's/.stf/.txt/' *.stf
+mv sjedrp.d10.stf sjedrp.d10.txt
+mv sjedrp.d20.stf sjedrp.d20.txt
+mv sjedrp.d25.stf sjedrp.d25.txt
+mv sjedrp.d30.stf sjedrp.d30.txt
