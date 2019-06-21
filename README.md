@@ -19,3 +19,9 @@ devtools::install_github('sje30/sjedrp')
 require(sjedrp)
 example(sjedrp)
 ```
+
+
+## Other programs
+
+<http://wdobbie.github.io/WebDRP/> is an online tool for calculating
+DRP if you don't have access to R.
