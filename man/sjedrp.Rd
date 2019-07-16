@@ -9,9 +9,10 @@
   Compute Rodieck's density recovery profile.
 }
 \usage{
-res <- autodrp(xs, ys, nbins, r, a)
-res <- crossdrp(xs1, ys1, xs2, ys2, nbins, r, a,auto)
-plot.sjedrp(res, mirror, scale)
+autodrp(xs, ys, nbins, r, a)
+crossdrp(xs1, ys1, xs2, ys2, nbins, r, a,auto)
+plot.sjedrp(x, scale = 1, title = NULL, mirror = FALSE,
+            show.title = TRUE, ylab = "density", xlab = "distance", ...)
 drp.makestf(x, y, file)
 }
 \arguments{
@@ -30,12 +31,17 @@ drp.makestf(x, y, file)
   \item{file}{File output (with Macintosh end of lines) for Bob
     Rodieck's program.  This has extra columns, as needed by pre-2001
     versions of his program.}
-  \item{res}{Output from a call to autodrp or crossdrp.}
   \item{scale}{Scaling factor for multiplying values on y-axis.  For
     example, if scale=1e6, this converts the density from $um^{-2}$ to
     $mm^{-2}$, which is more readable.}
   \item{mirror}{A boolean, FALSE by default.  If true, the DRP is
     plotted symmetrically around the y-axis.}
+  \item{title}{Title to place on top of the plot.}
+  \item{show.title}{A boolean, TRUE by default.  If TRUE, show the
+    title.}
+  \item{xlab}{Label to show on the x axis.}
+  \item{ylab}{Label to show on the y axis.}
+  \item{...}{Extra arguments to pass to plotting functions.}
 }
 \value{
   \item{res}{A list with the following components:}
