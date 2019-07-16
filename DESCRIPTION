@@ -1,8 +1,10 @@
 Package: sjedrp
 Version: 0.12
 Title: Density Recovery Profile for Retinal Mosaics
-Author: Stephen J. Eglen <sje30@cam.ac.uk>
+Authors@R: c(person("Stephen", "Eglen", role = c("aut", "cre", "cph"),
+                    email = "sje30@cam.ac.uk",
+		    comment = c(ORCID = "0000-0001-8607-8025")))
 Suggests: testthat
-Maintainer: Stephen J. Eglen <sje30@cam.ac.uk>
+Maintainer: Stephen Eglen <sje30@cam.ac.uk>
 Description: Compute the density recovery profile (Rodieck, 1991) <doi:10.1017/S095252380001049X>.
 License: GPL
