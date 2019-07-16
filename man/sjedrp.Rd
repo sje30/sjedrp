@@ -63,7 +63,7 @@ drp.makestf(x, y, file)
   Visual Neuroscience 6: 95-111.
 }
 \seealso{
-  \code{\link[spatial]{khat}} and other functions by Ripley and Diggle.
+  \code{\link[splancs]{khat}} and other functions by Ripley and Diggle.
   See also \code{\link{rodieckach}} for the data and code to generate the DRP
   from Rodieck (1992).  Various data files have been tested, see
   \code{\link{sjedrp.d10}} for details.
