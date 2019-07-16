@@ -38,6 +38,7 @@ R_CMethodDef cMethods[] = {
 
 void R_init_sjedrp(DllInfo *info) {
   R_registerRoutines(info, cMethods, NULL, NULL, NULL);
+  R_useDynamicSymbols(info, FALSE);
 }
 
 void drp_bin_it_r(Sfloat *x1s, Sfloat *y1s, int *pn1,
