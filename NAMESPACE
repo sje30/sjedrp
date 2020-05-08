@@ -4,3 +4,14 @@ exportPattern("^[^\\.]")
 
 ## Load in the shared object; this used to be done in zzz.R
 useDynLib(sjedrp, .registration = TRUE, .fixes = "C_")
+
+## register method
+S3method(plot, sjedrp)
+S3method(plot, sjecorr)
+
+importFrom("graphics", "axis", "barplot", "hist", "lines", "plot",
+           "points", "symbols")
+importFrom("stats", "runif")
+importFrom("utils", "read.table", "write.table")
+
+
