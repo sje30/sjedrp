@@ -11,8 +11,8 @@
 \usage{
 autodrp(xs, ys, nbins, r, a)
 crossdrp(xs1, ys1, xs2, ys2, nbins, r, a,auto)
-plot.sjedrp(x, scale = 1, title = NULL, mirror = FALSE,
-            show.title = TRUE, ylab = "density", xlab = "distance", ...)
+\method{plot}{sjedrp}(x, scale = 1, title = NULL, mirror = FALSE,
+     show.title = TRUE, ylab = "density", xlab = "distance", ...)
 drp.makestf(x, y, file)
 }
 \arguments{
