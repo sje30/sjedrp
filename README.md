@@ -1,6 +1,7 @@
 # sjedrp
 
-[Travis build status](https://travis-ci.com/sje30/sjedrp.svg?branch=master)](https://travis-ci.com/sje30/sjedrp)
+[![Travis build status](https://travis-ci.org/sje30/sjedrp.svg?branch=master)](https://travis-ci.org/sje30/sjedrp)
+
 
 
 
