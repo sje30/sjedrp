@@ -1,0 +1,27 @@
+---
+title: "sjedrp: Introduction to usage"
+author: "Stephen J Eglen"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    self_contained: true
+    toc: true
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{sjedrp: Introduction to usage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r rsetup-knitr,eval=TRUE,include=FALSE}
+require(knitr)
+options(width=60)
+opts_chunk$set(cache=TRUE)
+```
+
+
+# Introduction
+
+Hello world.  How to add citations?
+
+<!--This file can be rendered using rmarkdown::render("sjedrp_intro.Rmd")   -->
