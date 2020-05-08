@@ -2,6 +2,7 @@
 title: "sjedrp: Introduction to usage"
 author: "Stephen J Eglen"
 date: "`r Sys.Date()`"
+bibliography: refs.bib
 output:
   html_document:
     self_contained: true
@@ -22,6 +23,39 @@ opts_chunk$set(cache=TRUE)
 
 # Introduction
 
-Hello world.  How to add citations?
+The density recovery profile (DRP) is widely used method particularly in the
+study of retinal mosaics [@Rodieck1991-kc].  It is closely related to
+the older K function from spatial statistics: the DRP is the
+derivative of the K function.  ALthough they contain effectively the
+same information, most people prefer to examine the DRP.
 
-<!--This file can be rendered using rmarkdown::render("sjedrp_intro.Rmd")   -->
+The DRP works by measuring the relative position of neurons relative
+to each other.  It is robust to undersampling of the retinal mosaic,
+unlike simpler nearest-neighbour methods [@Cook1996-be].
+
+
+# Autocorrelation
+
+If you have one cell type to examine, the autocorrelation shows the
+empty space amongst those cells of the same type.  To compute the DRP,
+you first need to load in the X,Y values (assumed to be in microns):
+
+
+If you know the bounding box (a rectangular sample window from
+within which the neurons were detected), you can provide that
+information to get a more accurate assessment of boundary conditions.
+(The DRP has a compensation procedure when measuring the relative
+position of cells at the border.)
+
+
+# Crosscorrelation
+
+The crosscorrelation is performed when you have two cell types and you
+wish to measure the relative position of cells of one type to the
+cells of the second type.
+
+
+
+
+<!--This file can be rendered using
+rmarkdown::render("sjedrp_intro.Rmd") -->
