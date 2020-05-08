@@ -25,6 +25,13 @@ require(sjedrp)
 example(sjedrp)
 ```
 
+### Vignette
+
+A vignette is under development; please see:
+```
+vignette("sjedrp_intro")
+```
+
 
 ## Other programs
 
