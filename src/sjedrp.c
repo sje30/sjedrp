@@ -103,7 +103,6 @@ void cross_corr_r(Sfloat *x1s, Sfloat *y1s, int *pn1,
      
   int i,j;
   Sfloat x1, y1, x2, y2, dx, dy, dist2, r, maxdist;
-  int bin;
 
   int nbins, n1, n2, do_auto, k;
   nbins = *pnbins; n1 = *pn1; n2 = *pn2; r = *pr; do_auto=*pauto;
