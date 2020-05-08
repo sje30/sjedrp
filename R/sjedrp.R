@@ -95,53 +95,53 @@ crossdrp <- function(xs1, ys1, xs2, ys2, nbins, r, a=NULL, auto=FALSE) {
   res
 }
 
-plot.sjedrp <- function (res, scale=1, title=NULL, mirror=FALSE,
+plot.sjedrp <- function (x, scale=1, title=NULL, mirror=FALSE,
                          show.title=TRUE, ylab='density',
-                         xlab='distance') {
+                         xlab='distance', ...) {
   ## Plot the results of the density recovery profile.
   ## The SCALE parameter allows us to change the scale of the y axis.
   ## e.g. when going from um^2 to mm^2 use a scale of 1e6.
   ## MIRROR allows the plot to be mirrored across the y-axis.
   ## SHOW.TITLE:  If false,  do not add any title.
-  hts <- (res$ds*scale)
-  last.bin <- res$nbins * res$r
+  hts <- (x$ds*scale)
+  last.bin <- x$nbins * x$r
   plot.label <- paste(title,
-                      "eff rad", signif(res$effrad,3),
-                      "pack", signif(res$p,3),
-                      "maxr", signif(res$maxr,3),
-                      "rel", signif(res$k,3))
+                      "eff rad", signif(x$effrad,3),
+                      "pack", signif(x$p,3),
+                      "maxr", signif(x$maxr,3),
+                      "rel", signif(x$k,3))
   if (!show.title)
     plot.label <- NULL
   
-  ##names(hts) <- res$rs
+  ##names(hts) <- x$rs
 
   if (mirror) {
     ## Make the symmetrical plot.
     hts <- c(rev(hts), hts)
     
-    barplot(hts, col="gray",space=0, width=res$r, xlim=c(0,2*last.bin),
+    barplot(hts, col="gray",space=0, width=x$r, xlim=c(0,2*last.bin),
             main=plot.label, xlab=xlab, ylab=ylab)
 
     ## mean density line:
-    lines( c(0,2*last.bin), c(res$density, res$density)*scale)
+    lines( c(0,2*last.bin), c(x$density, x$density)*scale)
 
     ## draw x-axis
     axis(1, at=c(0, last.bin, 2*last.bin),
          labels=c(-last.bin, 0, last.bin))
 
     ## Draw the effective radius.
-    lines( c(res$effrad, res$effrad) + last.bin, scale * c(0, res$density))
+    lines( c(x$effrad, x$effrad) + last.bin, scale * c(0, x$density))
     
-    points( c(res$maxr + last.bin), c(0),pch='|')    #maximum radius.
+    points( c(x$maxr + last.bin), c(0),pch='|')    #maximum radius.
   } else {
     ## standard, one-sided plot.
-    barplot(hts, col="gray",space=0, width=res$r, xlim=c(0,last.bin),
+    barplot(hts, col="gray",space=0, width=x$r, xlim=c(0,last.bin),
             ylab=ylab, xlab=xlab,
             main=plot.label)
-    lines( c(0,last.bin), c(res$density, res$density)*scale)
+    lines( c(0,last.bin), c(x$density, x$density)*scale)
     axis(1, at=c(0, last.bin))
-    lines( c(res$effrad, res$effrad), scale * c(0, res$density))
-    points( c(res$maxr), c(0),pch='|')    #maximum radius
+    lines( c(x$effrad, x$effrad), scale * c(0, x$density))
+    points( c(x$maxr), c(0),pch='|')    #maximum radius
   }
 }
 
@@ -411,5 +411,8 @@ plot.sjecorr <- function(x, pts.cex=0.5, ...) {
        xlab='', ylab='', asp=1, bty='n')
   points(x$x, x$y, pch=19, cex=pts.cex)
   symbols(x=rep(0,nbins), y=rep(0,nbins),
-          circles=(1:nbins)*r, inch=F, add=T)
+          circles=(1:nbins)*r, inches=F, add=T)
 }
+
+
+
