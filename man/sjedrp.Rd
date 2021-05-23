@@ -12,7 +12,7 @@
 autodrp(xs, ys, nbins, r, a)
 crossdrp(xs1, ys1, xs2, ys2, nbins, r, a,auto)
 \method{plot}{sjedrp}(x, scale = 1, title = NULL, mirror = FALSE,
-     show.title = TRUE, ylab = "density", xlab = "distance", ...)
+     show.title = TRUE, ylab = "density", ylim=NULL, xlab = "distance", ...)
 drp.makestf(x, y, file)
 }
 \arguments{
@@ -41,6 +41,7 @@ drp.makestf(x, y, file)
     title.}
   \item{xlab}{Label to show on the x axis.}
   \item{ylab}{Label to show on the y axis.}
+  \item{ylim}{If non-NULL, then the (lo, hi) values to use for y axis.}
   \item{...}{Extra arguments to pass to plotting functions.}
 }
 \value{
