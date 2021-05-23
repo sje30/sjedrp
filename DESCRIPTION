@@ -9,3 +9,4 @@ Maintainer: Stephen Eglen <sje30@cam.ac.uk>
 Description: Compute the density recovery profile (Rodieck, 1991) <doi:10.1017/S095252380001049X>.
 License: GPL
 VignetteBuilder: knitr
+RoxygenNote: 7.1.1
