@@ -97,6 +97,7 @@ crossdrp <- function(xs1, ys1, xs2, ys2, nbins, r, a=NULL, auto=FALSE) {
 
 plot.sjedrp <- function (x, scale=1, title=NULL, mirror=FALSE,
                          show.title=TRUE, ylab='density',
+                         ylim=NULL,
                          xlab='distance', ...) {
   ## Plot the results of the density recovery profile.
   ## The SCALE parameter allows us to change the scale of the y axis.
@@ -120,6 +121,7 @@ plot.sjedrp <- function (x, scale=1, title=NULL, mirror=FALSE,
     hts <- c(rev(hts), hts)
     
     barplot(hts, col="gray",space=0, width=x$r, xlim=c(0,2*last.bin),
+            ylim=ylim,
             main=plot.label, xlab=xlab, ylab=ylab)
 
     ## mean density line:
@@ -136,6 +138,7 @@ plot.sjedrp <- function (x, scale=1, title=NULL, mirror=FALSE,
   } else {
     ## standard, one-sided plot.
     barplot(hts, col="gray",space=0, width=x$r, xlim=c(0,last.bin),
+            ylim=ylim,
             ylab=ylab, xlab=xlab,
             main=plot.label)
     lines( c(0,last.bin), c(x$density, x$density)*scale)
