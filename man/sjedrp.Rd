@@ -84,6 +84,7 @@ plot(res, scale=1e6)
 plot(res, mirror=TRUE, scale=1e6)
 title(xlab=expression(paste("distance (", mu, "m)")),
       ylab=expression(paste("density (cells/",mm^2, ")")))
+plot(res, scale=1e6, ylim=c(0, 800))
 }
 
 \author{Stephen Eglen}
