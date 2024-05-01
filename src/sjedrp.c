@@ -9,14 +9,14 @@
 
 /* Octave code was in ~/mosaics/code/drp */
 
-void cross_corr_r(Sfloat *x1s, Sfloat *y1s, int *pn1,
-		  Sfloat *x2s, Sfloat *y2s, int *pn2,
-		  int *pnbins, Sfloat *pr, int *pauto,
-		  Sfloat *dxs,  Sfloat *dys, int *pk);
+void cross_corr_r(double *x1s, double *y1s, int *pn1,
+		  double *x2s, double *y2s, int *pn2,
+		  int *pnbins, double *pr, int *pauto,
+		  double *dxs,  double *dys, int *pk);
 
-void drp_bin_it_r(Sfloat *x1s, Sfloat *y1s, int *pn1,
-		  Sfloat *x2s, Sfloat *y2s, int *pn2,
-		  int *pnbins, Sfloat *pr, int *pauto,
+void drp_bin_it_r(double *x1s, double *y1s, int *pn1,
+		  double *x2s, double *y2s, int *pn2,
+		  int *pnbins, double *pr, int *pauto,
 		  int   *ns);
 
 R_CMethodDef cMethods[] = {
@@ -40,9 +40,9 @@ void R_init_sjedrp(DllInfo *info) {
   R_useDynamicSymbols(info, FALSE);
 }
 
-void drp_bin_it_r(Sfloat *x1s, Sfloat *y1s, int *pn1,
-		  Sfloat *x2s, Sfloat *y2s, int *pn2,
-		  int *pnbins, Sfloat *pr, int *pauto,
+void drp_bin_it_r(double *x1s, double *y1s, int *pn1,
+		  double *x2s, double *y2s, int *pn2,
+		  int *pnbins, double *pr, int *pauto,
 		  int   *ns)
 {
   /* First data set is (x1s, y1s) of length n1.  Second data set is
@@ -58,7 +58,7 @@ void drp_bin_it_r(Sfloat *x1s, Sfloat *y1s, int *pn1,
    */
      
   int i,j;
-  Sfloat x1, y1, x2, y2, dx, dy, dist, r;
+  double x1, y1, x2, y2, dx, dy, dist, r;
   int bin;
 
   int nbins, n1, n2, do_auto;
@@ -89,10 +89,10 @@ void drp_bin_it_r(Sfloat *x1s, Sfloat *y1s, int *pn1,
   }
 }
 
-void cross_corr_r(Sfloat *x1s, Sfloat *y1s, int *pn1,
-		  Sfloat *x2s, Sfloat *y2s, int *pn2,
-		  int *pnbins, Sfloat *pr, int *pauto,
-		  Sfloat *dxs,  Sfloat *dys, int *pk)
+void cross_corr_r(double *x1s, double *y1s, int *pn1,
+		  double *x2s, double *y2s, int *pn2,
+		  int *pnbins, double *pr, int *pauto,
+		  double *dxs,  double *dys, int *pk)
 
 {
   /* First data set is (x1s, y1s) of length n1.  Second data set is
@@ -101,7 +101,7 @@ void cross_corr_r(Sfloat *x1s, Sfloat *y1s, int *pn1,
    */
      
   int i,j;
-  Sfloat x1, y1, x2, y2, dx, dy, dist2, r, maxdist;
+  double x1, y1, x2, y2, dx, dy, dist2, r, maxdist;
 
   int nbins, n1, n2, do_auto, k;
   nbins = *pnbins; n1 = *pn1; n2 = *pn2; r = *pr; do_auto=*pauto;
